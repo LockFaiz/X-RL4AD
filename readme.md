@@ -58,12 +58,12 @@
      + RL post training: reward function $r=R_{score}-\lambda \cdot r_{CoT}$ based on benchmark score, $r_{CoT}$  penalizes the length of CoT, trained with **GRPO** to get the adaptive ability switching between fast and slow response
      </details>
 2. [2025-05-22] DriveMoE: Mixture-of-Experts for Vision-Language-Action Model in End-to-End Autonomous Driving [![arXiv](https://img.shields.io/badge/arXiv-DriveMoE-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2505.16278) [![Website](https://img.shields.io/badge/Project-DriveMoE-blue)](https://thinklab-sjtu.github.io/DriveMoE/) [![Github](https://img.shields.io/badge/Github-❌-lightgrey?&logo=github&labelColor=305ce5)](https://github.com/Thinklab-SJTU/DriveMoE)
-   + Add vision and action MoE modules into Drive$\pi_0$ to obtain DriveMoE
+   + Add vision and action MoE modules into Drive $\pi_0$ to obtain DriveMoE
      + vision MoE: fiexed views + selective views based on the current driving context
      + action MoE: replace FFNs with MoE layers within flow-matching transformer.
    + <details><summary>More Info</summary>
 
-      + Training Drive$\pi_{0}$
+      + Training Drive $\pi_{0}$
         + Input: 2 fixed sequential front-view images; vehicle states(position, velocity, acceleration and heading angle)
         + Output: 10 future waypoints
         + fine-tuning standard $\pi_{0}$ on training set of Bench2Drive.
@@ -113,6 +113,6 @@
       + Output: 
         + future trajectories of ego vehicle and objects closest to ego vehicle
       + Additional work:
-        + Reward model
+        + Train reward model
         + Curate a pairwise preference dataset using GPT-4o for reward model training
       </details>
