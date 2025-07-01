@@ -1,4 +1,5 @@
-# VLA/VLM/LLM/Diffusion + RL for End-to-End Autnonomous Driving(E2EAD)
+# X + RL for Autonomous Driving Planning(VLA/VLM/Diffusion)
+
 ## Benchmark
 ### Open-loop
 
@@ -11,6 +12,7 @@
 
 
 ### Closed-loop
++ NavSim
 + <details><summary>Bench2Drive</summary>
 
   working within CARLA simulator. Evaluate on planning and reasonging ability. It contains 44 interactive, closed-loop scenarios under varying locations and weather conditions, using metrics such as 
@@ -43,6 +45,7 @@
 ### VLA+RL
 1. [2025-06-16] AutoVLA: A Vision-Language-Action Model for End-to-End Autonomous Driving with Adaptive Reasoning and Reinforcement Fine-Tuning [![arXiv](https://img.shields.io/badge/arXiv-AutoVLA-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2506.13757) [![Website](https://img.shields.io/badge/Project-AutoVLA-blue)](https://autovla.github.io/)
    + A unified autoregressive VLA model with dual-thinking(fast/slow with CoT) response.
+   + Evaluated on Bench2Drive(closed-loop) and Navsim(open-loop) benchmarks
    + <details><summary>More Info</summary>
 
      + Additional work: action codebook containing 2048 discrete action tokens; Curate a large causal reasoning annotations(CoT data)
@@ -57,12 +60,13 @@
      + Training: fine-tuned on a mixture of CoT driving data and sole action scenarios with **a combination loss of prediction** on text token and action token; 
      + RL post training: reward function $r=R_{score}-\lambda \cdot r_{CoT}$ based on benchmark score, $r_{CoT}$  penalizes the length of CoT, trained with **GRPO** to get the adaptive ability switching between fast and slow response
      </details>
-2. [2025-05-22] DriveMoE: Mixture-of-Experts for Vision-Language-Action Model in End-to-End Autonomous Driving [![arXiv](https://img.shields.io/badge/arXiv-DriveMoE-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2505.16278) [![Website](https://img.shields.io/badge/Project-DriveMoE-blue)](https://thinklab-sjtu.github.io/DriveMoE/) [![Github](https://img.shields.io/badge/Github-❌-lightgrey?&logo=github&labelColor=305ce5)](https://github.com/Thinklab-SJTU/DriveMoE)
+1. [2025-05-22] DriveMoE: Mixture-of-Experts for Vision-Language-Action Model in End-to-End Autonomous Driving [![arXiv](https://img.shields.io/badge/arXiv-DriveMoE-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2505.16278) [![Website](https://img.shields.io/badge/Project-DriveMoE-blue)](https://thinklab-sjtu.github.io/DriveMoE/) [![Github](https://img.shields.io/badge/Github-❌-lightgrey?&logo=github&labelColor=305ce5)](https://github.com/Thinklab-SJTU/DriveMoE)
    + Add vision and action MoE modules into Drive $\pi_0$ to obtain DriveMoE
-     + vision MoE: fiexed views + selective views based on the current driving context
-     + action MoE: replace FFNs with MoE layers within flow-matching transformer.
+   + Evaluated on Bench2Drive(closed-loop, open-loop)
    + <details><summary>More Info</summary>
-
+  
+      + vision MoE: fiexed views + selective views based on the current driving context
+      + action MoE: replace FFNs with MoE layers within flow-matching transformer.
       + Training Drive $\pi_{0}$
         + Input: 2 fixed sequential front-view images; vehicle states(position, velocity, acceleration and heading angle)
         + Output: 10 future waypoints
@@ -80,8 +84,25 @@
       + Additional work:
         + Annotate camera-level selection instruction to supervise for vision MoE</details>
 ### VLM+RL
-3. [2025-03-25] ![Conference](https://img.shields.io/badge/ICCV2025-conference?color=red)ORION: A Holistic End-to-End Autonomous Driving Framework by Vision-Language Instructed Action Generation [![arXiv](https://img.shields.io/badge/arXiv-ORION-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2503.19755) [![Website](https://img.shields.io/badge/Project-ORION-blue)](https://xiaomi-mlab.github.io/Orion/) [![Github](https://img.shields.io/badge/Github-ORION-yellow?&logo=github&labelColor=305ce5)](https://github.com/xiaomi-mlab/Orion)
+1. [2025-06-23] Drive-R1: Bridging Reasoning and Planning in VLMs for Autonomous Driving with Reinforcement Learning [![arXiv](https://img.shields.io/badge/arXiv-DriveR1-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2506.18234)
+   + A two-stage full-parameter supervised finetuning on VLM, then followed by a GRPO-based post-training alignment (rule-based reward function) 
+   + Evaluated on nuScenes(open-loop) benchmark
+   + <details><summary>More Info</summary>
+     
+     + Writing really needs improvement
+     + Backbone: InternVL2-4B
+     + Additional work:
+       + A large QA dataset for AD scenarios comprising 3 million samples
+       + RP-CoT: A reasoning-planning focused dataset, categorized to short CoT and long CoT (fast and slow thinking)
+     + SFT procedure:
+       1. trained on QA dataset to convert general-purpose VLM into AD-specifc VLM
+       2. then trained on RP-CoT to adaptively generate fast or slow response.
+     + Rule-based reward
+       + consists of 4 components: trajectory accuracy; meta-action rightness; repetition penalty; format following
+   </details>
+2. [2025-03-25] ![Conference](https://img.shields.io/badge/ICCV2025-conference?color=red)ORION: A Holistic End-to-End Autonomous Driving Framework by Vision-Language Instructed Action Generation [![arXiv](https://img.shields.io/badge/arXiv-ORION-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2503.19755) [![Website](https://img.shields.io/badge/Project-ORION-blue)](https://xiaomi-mlab.github.io/Orion/) [![Github](https://img.shields.io/badge/Github-ORION-yellow?&logo=github&labelColor=305ce5)](https://github.com/xiaomi-mlab/Orion)
     + A VAE/Diffusion-based generative planner conditioning on reasoning space of LLM  and action space of trajectory
+    + Evaluated on Bench2Drive(closed-loop, open-loop)
     + <details><summary>More Info</summary>
     
       + Following Query-Former of OmniDrive to use learnable queries including scene, perception, and history.
@@ -93,8 +114,9 @@
       + Backbone: EVA-02-L as vision encoder; Vicuna v1.5 as LLM
       </details>
 ### Diffusion + RL
-4. [2025-03-13] Finetuning Generative Trajectory Model with Reinforcement Learning from Human Feedback [![arXiv](https://img.shields.io/badge/arXiv-TrajHF-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2503.10434)
+1. [2025-03-13] Finetuning Generative Trajectory Model with Reinforcement Learning from Human Feedback [![arXiv](https://img.shields.io/badge/arXiv-TrajHF-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2503.10434)
    + Diffusion transformer post-trained by GRPO on Human Preference dataset, behavioral cloning pretrained model on general dataset.
+   + Evaluated on NavSim(closed-loop) and LiAuto normal/preference datasets(open-loop)
    + <details><summary>More Info</summary>
    
      + Dataset: NavSim/LiAuto Normal dataset for pretraining; LiAuto Preference dataset for HFRL
@@ -102,8 +124,9 @@
      + Output: 8 waypoints spanning 4 seconds
      + ViT as iamge encoder; ResNet34 as LiDAR encoder;
      </details>
-5. [2024-10-08] ![Conference](https://img.shields.io/badge/ICRA2025-conference?color=red) Gen-Drive: Enhancing Diffusion Generative Driving Policies with Reward Modeling and Reinforcement Learning Fine-tuning [![arXiv](https://img.shields.io/badge/arXiv-GenDrive-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2410.05582) [![Website](https://img.shields.io/badge/Project-GenDrive-blue)](https://mczhi.github.io/GenDrive/)
+2. [2024-10-08] ![Conference](https://img.shields.io/badge/ICRA2025-conference?color=red) Gen-Drive: Enhancing Diffusion Generative Driving Policies with Reward Modeling and Reinforcement Learning Fine-tuning [![arXiv](https://img.shields.io/badge/arXiv-GenDrive-black?logoColor=white&labelColor=8f1616&logo=arXiv&style=plastic)](https://arxiv.org/abs/2410.05582) [![Website](https://img.shields.io/badge/Project-GenDrive-blue)](https://mczhi.github.io/GenDrive/)
     + Generative planner (Query + Diffusion transformer) fine-tuned by a reward model (trained on preference data) and RL with Denosing Diffusion PO
+    + Evaluated on reduced nuPLan(closed-loop)
     + <details><summary>More Info</summary>
 
       + Input: 
