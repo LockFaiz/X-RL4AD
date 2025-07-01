@@ -89,7 +89,6 @@
    + Evaluated on nuScenes(open-loop) benchmark
    + <details><summary>More Info</summary>
      
-     + Writing really needs improvement
      + Backbone: InternVL2-4B
      + Additional work:
        + A large QA dataset for AD scenarios comprising 3 million samples
